@@ -1,3 +1,56 @@
-<view class="content">请登录微信小程序后台，点击右上角的工具->生成小程序码，生成的路径是：pages/showQrcode/showQrcode?url=二维码图片地址，如需自定义标题和显示摘要，这是完整的路径：pages/showQrcode/showQrcode?url=二维码图片地址&title=标题&desc=摘要</view>
-<button bind:tap="showQrcode">查看演示</button>
-<button bind:tap="goAlbum">进入相册</button>
+<view class="login-container">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="circle circle-1"></view>
+    <view class="circle circle-2"></view>
+    <view class="circle circle-3"></view>
+  </view>
+
+  <!-- Logo 区域 -->
+  <view class="logo-section">
+    <view class="logo-box">
+      <text class="logo-icon">🎯</text>
+    </view>
+    <text class="app-name">轻简相册</text>
+    <text class="app-slogan">记录生活，分享美好</text>
+  </view>
+
+  <!-- 登录卡片 -->
+  <view class="login-card">
+    <view class="card-title">欢迎登录</view>
+
+    <view class="input-group">
+      <view class="input-item">
+        <text class="input-icon">👤</text>
+        <input class="input-field" placeholder="请输入账号" placeholder-class="placeholder" bindinput="onAccountInput" value="{{account}}" />
+      </view>
+      <view class="input-divider"></view>
+      <view class="input-item">
+        <text class="input-icon">🔒</text>
+        <input class="input-field" password placeholder="请输入密码" placeholder-class="placeholder" bindinput="onPasswordInput" value="{{password}}" />
+      </view>
+    </view>
+
+    <view class="options-row">
+      <view class="remember-me" bindtap="toggleRemember">
+        <view class="checkbox {{remember ? 'checked' : ''}}">
+          <text wx:if="{{remember}}">✓</text>
+        </view>
+        <text class="option-text">记住我</text>
+      </view>
+      <text class="forgot-link">忘记密码？</text>
+    </view>
+
+    <button class="login-btn" bindtap="doLogin">登 录</button>
+
+    <view class="register-row">
+      <text class="register-text">还没有账号？</text>
+      <text class="register-link" bindtap="goRegister">立即注册</text>
+    </view>
+  </view>
+
+  <!-- 底部版权 -->
+  <view class="footer">
+    <text class="footer-text">© 2024 轻简相册 · 让回忆更简单</text>
+  </view>
+</view>
