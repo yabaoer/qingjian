@@ -1,15 +1,12 @@
 <view class="login-container">
-  <!-- 背景装饰 -->
-  <view class="bg-decoration">
-    <view class="circle circle-1"></view>
-    <view class="circle circle-2"></view>
-    <view class="circle circle-3"></view>
-  </view>
+  <!-- 背景 -->
+  <view class="bg-top"></view>
+  <view class="bg-bottom"></view>
 
   <!-- Logo 区域 -->
   <view class="logo-section">
     <view class="logo-box">
-      <text class="logo-icon">🎯</text>
+      <text class="logo-icon">📷</text>
     </view>
     <text class="app-name">轻简相册</text>
     <text class="app-slogan">记录生活，分享美好</text>
@@ -51,6 +48,6 @@
 
   <!-- 底部版权 -->
   <view class="footer">
-    <text class="footer-text">© 2024 轻简相册 · 让回忆更简单</text>
+    <text class="footer-text">© 2024 轻简相册</text>
   </view>
 </view>
