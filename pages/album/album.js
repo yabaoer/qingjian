@@ -1,4 +1,5 @@
 const app = getApp()
+const UPLOAD_API = 'https://up.yh888.cn/upload'
 const { get } = require('../../utils/request')
 
 Page({
@@ -6,8 +7,8 @@ Page({
     imageList: [],
     maxCount: 9,
     loggedIn: false,
-    user: null,
-    canUpload: false
+    canUpload: false,
+    uploading: false
   },
 
   onLoad() {
@@ -29,7 +30,6 @@ Page({
 
     this.setData({ loggedIn: true })
 
-    // 检查上传权限
     try {
       const res = await get('/api/upload/check', { openid })
       if (res.success) {
@@ -52,21 +52,56 @@ Page({
       wx.showToast({ title: '仅管理员可上传图片', icon: 'none' })
       return
     }
-    const that = this
+
     const remain = this.data.maxCount - this.data.imageList.length
     if (remain <= 0) {
       wx.showToast({ title: '最多9张图片', icon: 'none' })
       return
     }
+
     wx.chooseImage({
       count: remain,
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
-      success(res) {
-        const newList = [...that.data.imageList, ...res.tempFilePaths]
-        that.setData({ imageList: newList })
+      success: (res) => {
+        const tempPaths = res.tempFilePaths
+        wx.showLoading({ title: '上传中...', mask: true })
+        this.uploadImages(tempPaths, 0, [])
+      }
+    })
+  },
+
+  uploadImages(tempPaths, index, uploadedUrls) {
+    if (index >= tempPaths.length) {
+      wx.hideLoading()
+      if (uploadedUrls.length > 0) {
+        const newList = [...this.data.imageList, ...uploadedUrls]
+        this.setData({ imageList: newList })
         wx.setStorageSync('albumImages', newList)
-        wx.showToast({ title: '添加成功', icon: 'success' })
+        wx.showToast({ title: `上传成功${uploadedUrls.length}张`, icon: 'success' })
+      }
+      this.setData({ uploading: false })
+      return
+    }
+
+    const filePath = tempPaths[index]
+    wx.uploadFile({
+      url: UPLOAD_API,
+      filePath: filePath,
+      name: 'file',
+      success: (res) => {
+        const data = JSON.parse(res.data)
+        if (data.success) {
+          uploadedUrls.push(data.data.url)
+          this.uploadImages(tempPaths, index + 1, uploadedUrls)
+        } else {
+          wx.hideLoading()
+          wx.showToast({ title: '上传失败', icon: 'none' })
+        }
+      },
+      fail: () => {
+        wx.hideLoading()
+        wx.showToast({ title: '上传失败', icon: 'none' })
       }
     })
   },
