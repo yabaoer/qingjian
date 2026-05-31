@@ -19,9 +19,15 @@
   color: #333;
 }
 
-.count {
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.logout-btn {
   font-size: 24rpx;
-  color: #999;
+  color: #ff4d4f;
 }
 
 .grid {

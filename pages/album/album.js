@@ -1,27 +1,42 @@
 // 获取应用实例
 const app = getApp()
+const API_BASE = 'https://qingjian.yh888.cn'
 Page({
   data: {
     imageList: [],
     maxCount: 9,
+    loggedIn: false,
+    user: null
   },
 
   onLoad() {
-    this.loadImages()
+    this.checkLogin()
   },
 
   onShow() {
-    this.loadImages()
+    this.checkLogin()
   },
 
-  // 从本地存储加载图片
+  checkLogin() {
+    const openid = app.globalData.openid
+    const token = app.globalData.token
+    this.setData({ loggedIn: !!openid, user: openid ? { openid } : null })
+    if (!openid) {
+      wx.showToast({ title: '请先登录', icon: 'none' })
+      setTimeout(() => { wx.navigateTo({ url: '../index/index' }) }, 500)
+    }
+  },
+
   loadImages() {
     const list = wx.getStorageSync('albumImages') || []
     this.setData({ imageList: list })
   },
 
-  // 选择图片
   chooseImage() {
+    if (!this.data.loggedIn) {
+      wx.navigateTo({ url: '../index/index' })
+      return
+    }
     const that = this
     const remain = this.data.maxCount - this.data.imageList.length
     if (remain <= 0) {
@@ -41,7 +56,6 @@ Page({
     })
   },
 
-  // 预览图片
   previewImage(e) {
     const index = e.currentTarget.dataset.index
     wx.previewImage({
@@ -50,7 +64,6 @@ Page({
     })
   },
 
-  // 删除图片
   deleteImage(e) {
     const index = e.currentTarget.dataset.index
     const list = [...this.data.imageList]
@@ -60,7 +73,6 @@ Page({
     wx.showToast({ title: '已删除', icon: 'success' })
   },
 
-  // 清空相册
   clearAll() {
     wx.showModal({
       title: '提示',
@@ -71,25 +83,13 @@ Page({
           wx.setStorageSync('albumImages', [])
           wx.showToast({ title: '已清空', icon: 'success' })
         }
-      }
+      }.bind(this)
     })
   },
 
-  // 预览模式下长按删除
-  longPressImage(e) {
-    const index = e.currentTarget.dataset.index
-    wx.showModal({
-      title: '提示',
-      content: '删除这张图片？',
-      success(res) {
-        if (res.confirm) {
-          const list = [...this.data.imageList]
-          list.splice(index, 1)
-          this.setData({ imageList: list })
-          wx.setStorageSync('albumImages', list)
-          wx.showToast({ title: '已删除', icon: 'success' })
-        }
-      }
-    })
+  logout() {
+    app.clearUser()
+    wx.showToast({ title: '已退出', icon: 'success' })
+    setTimeout(() => { wx.navigateTo({ url: '../index/index' }) }, 800)
   }
 })

@@ -1,7 +1,10 @@
 <view class="container">
   <view class="header">
-    <text class="title">相册</text>
-    <text class="count">{{imageList.length}}/{{maxCount}}</text>
+    <text class="title">我的相册</text>
+    <view class="header-right">
+      <text class="count">{{imageList.length}}/{{maxCount}}</text>
+      <text class="logout-btn" bindtap="logout">退出</text>
+    </view>
   </view>
 
   <view class="grid" wx:if="{{imageList.length > 0}}">
