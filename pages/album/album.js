@@ -97,13 +97,13 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定清空所有图片？',
-      success(res) {
+      success: (res) => {
         if (res.confirm) {
           this.setData({ imageList: [] })
           wx.setStorageSync('albumImages', [])
           wx.showToast({ title: '已清空', icon: 'success' })
         }
-      }.bind(this)
+      }
     })
   },
 
