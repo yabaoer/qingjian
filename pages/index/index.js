@@ -1,10 +1,8 @@
 const app = getApp()
-const API_BASE = 'https://qingjian.yh888.cn'
+const { post } = require('../../utils/request')
 
 Page({
-  data: {
-
-  },
+  data: {},
 
   doLogin() {
     wx.showLoading({ title: '登录中...' })
@@ -17,30 +15,19 @@ Page({
           return
         }
 
-        wx.request({
-          url: `${API_BASE}/api/login`,
-          method: 'POST',
-          header: { 'Content-Type': 'application/json' },
-          data: { code: loginRes.code },
-          success(res) {
+        post('/api/login', { code: loginRes.code })
+          .then(res => {
             wx.hideLoading()
-            const data = res.data
-            if (data.success) {
-              app.saveUser(data.data.user.openid, data.data.token)
-              wx.showToast({ title: '登录成功', icon: 'success' })
-              setTimeout(() => {
-                wx.switchTab({ url: '../album/album' })
-              }, 800)
-            } else {
-              wx.showToast({ title: data.message || '登录失败', icon: 'none' })
-            }
-          },
-          fail(err) {
+            app.saveUser(res.data.user.openid, res.data.token)
+            wx.showToast({ title: '登录成功', icon: 'success' })
+            setTimeout(() => {
+              wx.switchTab({ url: '../album/album' })
+            }, 800)
+          })
+          .catch(err => {
             wx.hideLoading()
-            wx.showToast({ title: '网络错误', icon: 'none' })
-            console.error('登录请求失败', err)
-          }
-        })
+            wx.showToast({ title: err.message || '登录失败', icon: 'none' })
+          })
       },
       fail() {
         wx.hideLoading()

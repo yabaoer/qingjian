@@ -1,5 +1,6 @@
 const app = getApp()
-const API_BASE = 'https://qingjian.yh888.cn'
+const { get } = require('../../utils/request')
+
 Page({
   data: {
     imageList: [],
@@ -19,26 +20,20 @@ Page({
 
   async checkLogin() {
     const openid = app.globalData.openid
-    const token = app.globalData.token
     if (!openid) {
-      this.setData({ loggedIn: false, user: null, canUpload: false })
+      this.setData({ loggedIn: false, canUpload: false })
       wx.showToast({ title: '请先登录', icon: 'none' })
       setTimeout(() => { wx.navigateTo({ url: '../index/index' }) }, 500)
       return
     }
-    this.setData({ loggedIn: true, user: { openid } })
+
+    this.setData({ loggedIn: true })
 
     // 检查上传权限
     try {
-      const res = await new Promise((resolve, reject) => {
-        wx.request({
-          url: `${API_BASE}/api/upload/check?openid=${openid}`,
-          success: resolve,
-          fail: reject
-        })
-      })
-      if (res.data.success) {
-        this.setData({ canUpload: res.data.data.canUpload })
+      const res = await get('/api/upload/check', { openid })
+      if (res.success) {
+        this.setData({ canUpload: res.data.canUpload })
       }
     } catch (e) {
       console.error('检查上传权限失败', e)
