@@ -3,33 +3,12 @@ const API_BASE = 'https://qingjian.yh888.cn'
 
 Page({
   data: {
-    account: '',
-    password: '',
-    remember: false
-  },
 
-  onAccountInput(e) {
-    this.setData({ account: e.detail.value })
-  },
-
-  onPasswordInput(e) {
-    this.setData({ password: e.detail.value })
-  },
-
-  toggleRemember() {
-    this.setData({ remember: !this.data.remember })
   },
 
   doLogin() {
-    const { account, password } = this.data
-    if (!account || !password) {
-      wx.showToast({ title: '请输入账号密码', icon: 'none' })
-      return
-    }
-
     wx.showLoading({ title: '登录中...' })
 
-    // 先通过微信 code 登录
     wx.login({
       success(loginRes) {
         if (!loginRes.code) {
@@ -38,7 +17,6 @@ Page({
           return
         }
 
-        // 调用后端登录接口
         wx.request({
           url: `${API_BASE}/api/login`,
           method: 'POST',
@@ -48,9 +26,7 @@ Page({
             wx.hideLoading()
             const data = res.data
             if (data.success) {
-              // 保存登录态
               app.saveUser(data.data.user.openid, data.data.token)
-
               wx.showToast({ title: '登录成功', icon: 'success' })
               setTimeout(() => {
                 wx.switchTab({ url: '../album/album' })
@@ -71,9 +47,5 @@ Page({
         wx.showToast({ title: '微信登录失败', icon: 'none' })
       }
     })
-  },
-
-  goRegister() {
-    wx.showToast({ title: '注册功能开发中', icon: 'none' })
   }
 })
