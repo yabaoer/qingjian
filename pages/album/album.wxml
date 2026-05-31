@@ -17,19 +17,22 @@
       bindlongpress="longPressImage"
     >
       <image mode="aspectFill" src="{{item}}" />
-      <view class="delete-icon" catchtap="deleteImage" data-index="{{index}}">×</view>
+      <view class="delete-icon" catchtap="deleteImage" data-index="{{index}}" wx:if="{{canUpload}}">×</view>
     </view>
   </view>
 
   <view class="empty" wx:else>
-    <text>暂无图片，点击下方按钮添加</text>
+    <text>暂无图片</text>
   </view>
 
   <view class="btn-box">
-    <button class="add-btn" bindtap="chooseImage" wx:if="{{imageList.length < maxCount}}">
+    <button class="add-btn" bindtap="chooseImage" wx:if="{{canUpload && imageList.length < maxCount}}">
       + 添加图片
     </button>
-    <button class="clear-btn" bindtap="clearAll" wx:if="{{imageList.length > 0}}">
+    <view class="no-permission" wx:if="{{!canUpload}}">
+      <text>仅管理员可上传图片</text>
+    </view>
+    <button class="clear-btn" bindtap="clearAll" wx:if="{{canUpload && imageList.length > 0}}">
       清空相册
     </button>
   </view>
