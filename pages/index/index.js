@@ -20,7 +20,7 @@ Page({
             app.saveUser(res.data.user.openid, res.data.token)
             wx.showToast({ title: '登录成功', icon: 'success' })
             setTimeout(() => {
-              wx.navigateTo({ url: '/pages/album/album' })
+              wx.switchTab({ url: '../album/album' })
             }, 800)
           })
           .catch(err => {
