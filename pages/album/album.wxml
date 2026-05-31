@@ -1,0 +1,33 @@
+<view class="container">
+  <view class="header">
+    <text class="title">相册</text>
+    <text class="count">{{imageList.length}}/{{maxCount}}</text>
+  </view>
+
+  <view class="grid" wx:if="{{imageList.length > 0}}">
+    <view
+      class="grid-item"
+      wx:for="{{imageList}}"
+      wx:key="index"
+      data-index="{{index}}"
+      bindtap="previewImage"
+      bindlongpress="longPressImage"
+    >
+      <image mode="aspectFill" src="{{item}}" />
+      <view class="delete-icon" catchtap="deleteImage" data-index="{{index}}">×</view>
+    </view>
+  </view>
+
+  <view class="empty" wx:else>
+    <text>暂无图片，点击下方按钮添加</text>
+  </view>
+
+  <view class="btn-box">
+    <button class="add-btn" bindtap="chooseImage" wx:if="{{imageList.length < maxCount}}">
+      + 添加图片
+    </button>
+    <button class="clear-btn" bindtap="clearAll" wx:if="{{imageList.length > 0}}">
+      清空相册
+    </button>
+  </view>
+</view>
