@@ -17,26 +17,50 @@
 
   <!-- 登录卡片 -->
   <view class="login-card">
-    <view class="card-title">欢迎回来</view>
-    <view class="card-desc">授权微信后填写地区，即可登录</view>
+    <view class="card-title">完善资料</view>
+    <view class="card-desc">选头像、填昵称、选地区后即可登录</view>
 
-    <!-- 步骤 1：微信授权（拿昵称 + 头像） -->
+    <!-- 步骤 1：选头像 + 填昵称（chooseAvatar） -->
     <view class="step-row {{step >= 2 ? 'done' : ''}}">
       <view class="step-no">{{step >= 2 ? '✓' : '1'}}</view>
       <view class="step-content">
-        <view class="step-label">微信授权</view>
-        <view class="step-value" wx:if="{{nickname}}">
+        <view class="step-label">头像 & 昵称</view>
+        <view class="step-value" wx:if="{{avatarUrl}}">
           <image class="avatar" src="{{avatarUrl}}"></image>
-          <text class="nickname">{{nickname}}</text>
+          <text class="nickname" wx:if="{{nickname}}">{{nickname}}</text>
+          <text class="muted" wx:else>已选头像，请填昵称</text>
         </view>
-        <view class="step-value muted" wx:else>未授权</view>
+        <view class="step-value muted" wx:else>未选择</view>
       </view>
+    </view>
+
+    <!-- 头像选择 button（open-type=chooseAvatar） -->
+    <view class="avatar-picker" wx:if="{{step < 2}}">
       <button
-        class="step-btn"
-        open-type="getUserInfo"
-        bindtap="onWxLogin"
-        wx:if="{{step < 2}}"
-      >授权</button>
+        class="avatar-btn"
+        open-type="chooseAvatar"
+        bindchooseavatar="onChooseAvatar"
+      >
+        <view class="avatar-slot" wx:if="{{!avatarUrl}}">
+          <text class="avatar-plus">+</text>
+          <text class="avatar-tip">选头像</text>
+        </view>
+        <image wx:else class="avatar-preview" src="{{avatarUrl}}"></image>
+      </button>
+    </view>
+
+    <!-- 昵称 input -->
+    <view class="nickname-input" wx:if="{{step < 2 || step === 2}}">
+      <text class="input-label">昵称</text>
+      <input
+        class="input-field"
+        type="nickname"
+        value="{{nickname}}"
+        bindinput="onNicknameInput"
+        placeholder="请输入您的昵称"
+        maxlength="20"
+        confirm-type="done"
+      />
     </view>
 
     <!-- 步骤 2：省市区 picker -->

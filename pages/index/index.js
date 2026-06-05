@@ -3,19 +3,18 @@ const { post } = require('../../utils/request')
 
 Page({
   data: {
-    // 微信昵称 + 头像
+    // 用户资料（来自 chooseAvatar + picker）
     nickname: '',
     avatarUrl: '',
     // 省市区（picker mode=region）
     region: ['', '', ''],
     regionText: '请选择省/市/区',
     // 步骤状态
-    step: 1,             // 1=待授权, 2=已授权待选地区, 3=已选待登录
+    step: 1,             // 1=待选头像+填昵称, 2=待选地区, 3=待登录
     submitting: false
   },
 
   onShow() {
-    // 每次回到页面，根据已有数据重算 step
     this.recomputeStep()
   },
 
@@ -27,45 +26,26 @@ Page({
     this.setData({ step })
   },
 
-  // 步骤 1：button 触发 wx.getUserProfile + wx.login
-  onWxLogin() {
-    if (this.data.submitting) return
-    wx.showLoading({ title: '拉起授权...', mask: true })
+  // 步骤 1：button open-type="chooseAvatar" 触发
+  // 弹微信"换头像"面板，用户选头像 + 填昵称
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail
+    if (!avatarUrl) {
+      wx.showToast({ title: '未选择头像', icon: 'none' })
+      return
+    }
+    this.setData({ avatarUrl })
 
-    // 先 wx.login 拿 code（其实 getUserProfile 流程不需要 code，但后面要传给后端换 openid）
-    wx.login({
-      success: (loginRes) => {
-        if (!loginRes.code) {
-          wx.hideLoading()
-          wx.showToast({ title: '微信登录失败', icon: 'none' })
-          return
-        }
-        // 再调 getUserProfile 拿用户信息（必须在 button click 回调里）
-        wx.getUserProfile({
-          desc: '用于完善资料',
-          lang: 'zh_CN',
-          success: (profileRes) => {
-            wx.hideLoading()
-            const ui = profileRes.userInfo || {}
-            this.setData({
-              nickname:  ui.nickName  || '',
-              avatarUrl: ui.avatarUrl || '',
-            })
-            wx.setStorageSync('wxCode', loginRes.code) // 留着后面登录用
-            this.recomputeStep()
-            wx.showToast({ title: '已获取微信信息，请选择地区', icon: 'none' })
-          },
-          fail: () => {
-            wx.hideLoading()
-            wx.showToast({ title: '已取消授权', icon: 'none' })
-          }
-        })
-      },
-      fail: () => {
-        wx.hideLoading()
-        wx.showToast({ title: '微信登录拉起失败', icon: 'none' })
-      }
-    })
+    // chooseAvatar 在用户选完头像后，微信 UI 会自动让用户填昵称
+    // 但拿不到 nickName 字段，需要用户在小程序内手动填一个 input
+    // 提示用户去下面填昵称
+    wx.showToast({ title: '请在下方填写昵称', icon: 'none' })
+  },
+
+  // 昵称 input 双向绑定
+  onNicknameInput(e) {
+    this.setData({ nickname: e.detail.value })
+    this.recomputeStep()
   },
 
   // 步骤 2：picker mode=region 选省市区
@@ -83,7 +63,7 @@ Page({
   async onSubmit() {
     if (this.data.submitting) return
     if (this.data.step !== 3) {
-      wx.showToast({ title: '请先完成微信授权和地区选择', icon: 'none' })
+      wx.showToast({ title: '请先完成头像昵称和地区选择', icon: 'none' })
       return
     }
     this.setData({ submitting: true })
@@ -91,7 +71,7 @@ Page({
 
     try {
       const code = wx.getStorageSync('wxCode')
-      if (!code) throw new Error('缺少微信 code，请重新授权')
+      if (!code) throw new Error('缺少微信 code，请重新进入')
 
       // 1) 调后端换 openid + token
       const loginRes = await post('/api/login', { code })
@@ -104,7 +84,7 @@ Page({
         openid,
         nickname: this.data.nickname,
         avatar:   this.data.avatarUrl,
-        region:   this.data.region.join('-')   // "广东-广州-天河区"
+        region:   this.data.region.join('-')
       })
 
       // 3) 缓存到 app 全局 + 本地
