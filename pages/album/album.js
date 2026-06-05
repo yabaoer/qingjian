@@ -1,5 +1,5 @@
 const app = getApp()
-const UPLOAD_API = 'https://up.yh888.cn/upload'
+const UPLOAD_API = 'https://qingjian.yh888.cn/upload'
 const { get } = require('../../utils/request')
 
 Page({
@@ -89,6 +89,7 @@ Page({
       url: UPLOAD_API,
       filePath: filePath,
       name: 'file',
+      formData: { openid: app.globalData.openid || '' },
       success: (res) => {
         const data = JSON.parse(res.data)
         if (data.success) {
@@ -96,7 +97,7 @@ Page({
           this.uploadImages(tempPaths, index + 1, uploadedUrls)
         } else {
           wx.hideLoading()
-          wx.showToast({ title: '上传失败', icon: 'none' })
+          wx.showToast({ title: data.message || '上传失败', icon: 'none' })
         }
       },
       fail: () => {

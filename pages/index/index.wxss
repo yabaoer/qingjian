@@ -111,6 +111,90 @@
   margin-bottom: 50rpx;
 }
 
+/* 步骤行 */
+.step-row {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.step-row:last-of-type {
+  border-bottom: none;
+  margin-bottom: 30rpx;
+}
+
+.step-no {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #e8eaf6;
+  color: #667eea;
+  font-size: 28rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+}
+
+.step-row.done .step-no {
+  background: linear-gradient(135deg, #07c160 0%, #00a854 100%);
+  color: #fff;
+}
+
+.step-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.step-label {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 6rpx;
+}
+
+.step-value {
+  font-size: 24rpx;
+  color: #666;
+  display: flex;
+  align-items: center;
+  min-height: 36rpx;
+}
+
+.step-value.muted {
+  color: #bbb;
+}
+
+.avatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  margin-right: 12rpx;
+  background: #eee;
+}
+
+.nickname {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.step-btn {
+  background: #667eea;
+  color: #fff;
+  font-size: 24rpx;
+  border-radius: 30rpx;
+  padding: 0 24rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  border: none;
+  flex-shrink: 0;
+}
+.step-btn::after {
+  border: none;
+}
+
 /* 登录按钮 */
 .login-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -126,6 +210,12 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 30rpx;
+}
+
+.login-btn[disabled] {
+  background: #ccc;
+  color: #fff;
+  box-shadow: none;
 }
 
 .login-btn::after {
