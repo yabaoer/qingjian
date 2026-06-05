@@ -26,6 +26,16 @@ Page({
     this.setData({ step })
   },
 
+  // 拿一个新鲜的微信 code（每次提交时都重拿）
+  freshWxCode() {
+    return new Promise((resolve) => {
+      wx.login({
+        success: (res) => resolve(res.code || ''),
+        fail: () => resolve('')
+      })
+    })
+  },
+
   // 步骤 1：button open-type="chooseAvatar" 触发
   // 弹微信"换头像"面板，用户选头像 + 填昵称
   onChooseAvatar(e) {
@@ -70,8 +80,10 @@ Page({
     wx.showLoading({ title: '登录中...', mask: true })
 
     try {
-      const code = wx.getStorageSync('wxCode')
-      if (!code) throw new Error('缺少微信 code，请重新进入')
+      // 每次提交都重新 wx.login 拿一个新 code
+      // （微信 code 5 分钟有效，避免 chooseAvatar 流程走太久 code 过期）
+      const code = await this.freshWxCode()
+      if (!code) throw new Error('微信登录拉起失败')
 
       // 1) 调后端换 openid + token
       const loginRes = await post('/api/login', { code })
