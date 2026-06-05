@@ -1,320 +1,251 @@
-/* 全屏容器 */
-.login-container {
+/* 整页 */
+.login-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f6f7fb;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40rpx;
+}
+
+/* 顶部渐变 hero */
+.hero {
   position: relative;
+  height: 460rpx;
+  background: linear-gradient(135deg, #7c5cff 0%, #b06bff 50%, #ff6fa3 100%);
   overflow: hidden;
+  border-bottom-left-radius: 56rpx;
+  border-bottom-right-radius: 56rpx;
+  box-shadow: 0 12rpx 40rpx rgba(124, 92, 255, 0.25);
 }
 
-/* 背景装饰圆 */
-.bg-decoration {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-}
-
-.circle {
+/* 装饰气泡 */
+.hero-deco {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
+}
+.hero-deco-1 {
+  width: 260rpx; height: 260rpx;
+  top: -80rpx; right: -60rpx;
+  background: rgba(255, 255, 255, 0.15);
+}
+.hero-deco-2 {
+  width: 180rpx; height: 180rpx;
+  bottom: 40rpx; left: -40rpx;
+  background: rgba(255, 255, 255, 0.10);
+}
+.hero-deco-3 {
+  width: 100rpx; height: 100rpx;
+  top: 200rpx; right: 80rpx;
+  background: rgba(255, 255, 255, 0.18);
 }
 
-.circle-1 {
-  width: 400rpx;
-  height: 400rpx;
-  top: -100rpx;
-  right: -100rpx;
-}
-
-.circle-2 {
-  width: 300rpx;
-  height: 300rpx;
-  bottom: 100rpx;
-  left: -150rpx;
-}
-
-.circle-3 {
-  width: 200rpx;
-  height: 200rpx;
-  bottom: -50rpx;
-  right: 50rpx;
-}
-
-/* Logo 区域 */
-.logo-section {
+/* 品牌区（居中） */
+.brand {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 60rpx;
-  z-index: 1;
+  padding-top: 140rpx;
 }
 
-.logo-box {
+.brand-logo {
   width: 140rpx;
   height: 140rpx;
   background: #fff;
-  border-radius: 32rpx;
+  border-radius: 36rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20rpx 40rpx rgba(0, 0, 0, 0.15);
+  font-size: 80rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.12);
   margin-bottom: 24rpx;
 }
 
-.logo-icon {
-  font-size: 72rpx;
+.brand-name {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2rpx;
+  margin-bottom: 12rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
-.app-name {
-  font-size: 42rpx;
-  font-weight: bold;
-  color: #fff;
-  margin-bottom: 12rpx;
+.brand-slogan {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
   letter-spacing: 4rpx;
 }
 
-.app-slogan {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-/* 登录卡片 */
-.login-card {
-  width: 100%;
+/* 资料卡 */
+.card {
+  position: relative;
+  margin: -80rpx 32rpx 0;
   background: #fff;
-  border-radius: 24rpx;
-  padding: 50rpx 40rpx 40rpx;
-  box-shadow: 0 30rpx 60rpx rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  border-radius: 32rpx;
+  padding: 48rpx 40rpx 40rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+  z-index: 3;
 }
 
 .card-title {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1f2330;
   text-align: center;
-  margin-bottom: 16rpx;
+  margin-bottom: 12rpx;
 }
 
-.card-desc {
+.card-sub {
+  display: block;
   font-size: 26rpx;
-  color: #999;
+  color: #9aa0b4;
   text-align: center;
-  margin-bottom: 50rpx;
+  margin-bottom: 56rpx;
 }
 
-/* 头像选择 */
-.avatar-picker {
+/* 头像 */
+.avatar-row {
   display: flex;
-  justify-content: center;
-  padding: 20rpx 0;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 56rpx;
 }
 
 .avatar-btn {
   width: 200rpx;
   height: 200rpx;
   border-radius: 50%;
-  background: #f0f0f0;
-  border: 2rpx dashed #c0c4cc;
   padding: 0;
   margin: 0;
+  background: transparent;
   overflow: hidden;
   position: relative;
+  line-height: 1;
 }
-
 .avatar-btn::after {
   border: none;
 }
 
-.avatar-slot {
+.avatar-img {
   width: 100%;
   height: 100%;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+  box-shadow: 0 8rpx 20rpx rgba(124, 92, 255, 0.25);
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f1eafe 0%, #fde6f1 100%);
+  border: 4rpx dashed #c8b9ff;
+  border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #999;
+  box-sizing: border-box;
 }
 
 .avatar-plus {
-  font-size: 60rpx;
+  font-size: 64rpx;
+  color: #7c5cff;
   line-height: 1;
+  font-weight: 200;
   margin-bottom: 8rpx;
 }
 
-.avatar-tip {
-  font-size: 22rpx;
+.avatar-text {
+  font-size: 24rpx;
+  color: #7c5cff;
 }
 
-.avatar-preview {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
+.avatar-hint {
+  margin-top: 24rpx;
+  font-size: 26rpx;
 }
 
-/* 昵称 input */
-.nickname-input {
+.hint-done {
+  color: #5acf6f;
+  font-weight: 500;
+}
+.hint-todo {
+  color: #9aa0b4;
+}
+
+/* 昵称输入 */
+.input-block {
+  background: #f6f7fb;
+  border-radius: 20rpx;
+  height: 96rpx;
   display: flex;
   align-items: center;
-  background: #f7f7f7;
-  border-radius: 12rpx;
-  padding: 0 24rpx;
-  height: 80rpx;
-  margin-bottom: 30rpx;
+  padding: 0 32rpx;
+  margin-bottom: 56rpx;
+  transition: background 0.2s;
 }
 
 .input-label {
-  font-size: 26rpx;
-  color: #666;
+  font-size: 28rpx;
+  color: #1f2330;
+  font-weight: 500;
   width: 100rpx;
   flex-shrink: 0;
 }
 
 .input-field {
   flex: 1;
-  font-size: 28rpx;
-  color: #333;
+  font-size: 30rpx;
+  color: #1f2330;
   height: 100%;
 }
 
-/* 步骤行 */
-.step-row {
-  display: flex;
-  align-items: center;
-  padding: 24rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-.step-row:last-of-type {
-  border-bottom: none;
-  margin-bottom: 30rpx;
-}
-
-.step-no {
-  width: 56rpx;
-  height: 56rpx;
-  border-radius: 50%;
-  background: #e8eaf6;
-  color: #667eea;
+.input-placeholder {
+  color: #c0c4d4;
   font-size: 28rpx;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-right: 20rpx;
-}
-
-.step-row.done .step-no {
-  background: linear-gradient(135deg, #07c160 0%, #00a854 100%);
-  color: #fff;
-}
-
-.step-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.step-label {
-  font-size: 26rpx;
-  color: #333;
-  font-weight: 500;
-  margin-bottom: 6rpx;
-}
-
-.step-value {
-  font-size: 24rpx;
-  color: #666;
-  display: flex;
-  align-items: center;
-  min-height: 36rpx;
-}
-
-.step-value.muted {
-  color: #bbb;
-}
-
-.avatar {
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 50%;
-  margin-right: 12rpx;
-  background: #eee;
-}
-
-.nickname {
-  font-size: 26rpx;
-  color: #333;
-}
-
-.step-btn {
-  background: #667eea;
-  color: #fff;
-  font-size: 24rpx;
-  border-radius: 30rpx;
-  padding: 0 24rpx;
-  height: 56rpx;
-  line-height: 56rpx;
-  border: none;
-  flex-shrink: 0;
-}
-.step-btn::after {
-  border: none;
 }
 
 /* 登录按钮 */
-.login-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  font-size: 32rpx;
-  font-weight: bold;
+.submit-btn {
+  width: 100%;
+  height: 100rpx;
   border-radius: 50rpx;
-  height: 96rpx;
-  line-height: 96rpx;
-  border: none;
-  box-shadow: 0 10rpx 30rpx rgba(102, 126, 234, 0.4);
+  background: #e0e2ed;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 30rpx;
+  letter-spacing: 2rpx;
+  transition: all 0.25s;
+  margin-bottom: 28rpx;
+  border: none;
+}
+.submit-btn::after {
+  border: none;
 }
 
-.login-btn[disabled] {
-  background: #ccc;
+.submit-btn.active {
+  background: linear-gradient(135deg, #7c5cff 0%, #b06bff 100%);
+  box-shadow: 0 8rpx 20rpx rgba(124, 92, 255, 0.35);
+}
+
+.submit-btn[disabled] {
+  background: #e0e2ed;
   color: #fff;
-  box-shadow: none;
 }
 
-.login-btn::after {
-  border: none;
-}
-
-.login-btn-icon {
-  font-size: 40rpx;
-  margin-right: 12rpx;
-}
-
-/* 用户协议 */
-.tips-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.tips {
+/* 协议 */
+.agreement {
+  text-align: center;
   font-size: 24rpx;
-  color: #999;
+  color: #9aa0b4;
 }
 
-.link {
-  font-size: 24rpx;
-  color: #667eea;
-  margin-left: 6rpx;
+.agreement-link {
+  color: #7c5cff;
+  font-weight: 500;
 }

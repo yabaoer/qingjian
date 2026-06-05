@@ -1,56 +1,43 @@
-<view class="login-container">
-  <!-- 背景装饰 -->
-  <view class="bg-decoration">
-    <view class="circle circle-1"></view>
-    <view class="circle circle-2"></view>
-    <view class="circle circle-3"></view>
+<view class="login-page">
+  <!-- 顶部渐变背景 -->
+  <view class="hero">
+    <view class="hero-deco hero-deco-1"></view>
+    <view class="hero-deco hero-deco-2"></view>
+    <view class="hero-deco hero-deco-3"></view>
+    <view class="brand">
+      <view class="brand-logo">📷</view>
+      <text class="brand-name">轻简相册</text>
+      <text class="brand-slogan">记录生活 · 分享美好</text>
+    </view>
   </view>
 
-  <!-- Logo 区域 -->
-  <view class="logo-section">
-    <view class="logo-box">
-      <text class="logo-icon">📷</text>
-    </view>
-    <text class="app-name">轻简相册</text>
-    <text class="app-slogan">记录生活，分享美好</text>
-  </view>
+  <!-- 资料卡（浮在 hero 底部） -->
+  <view class="card">
+    <text class="card-title">完善资料</text>
+    <text class="card-sub">选头像 + 填昵称后即可登录</text>
 
-  <!-- 登录卡片 -->
-  <view class="login-card">
-    <view class="card-title">完善资料</view>
-    <view class="card-desc">选头像、填昵称、选地区后即可登录</view>
-
-    <!-- 步骤 1：选头像 + 填昵称（chooseAvatar） -->
-    <view class="step-row {{step >= 2 ? 'done' : ''}}">
-      <view class="step-no">{{step >= 2 ? '✓' : '1'}}</view>
-      <view class="step-content">
-        <view class="step-label">头像 & 昵称</view>
-        <view class="step-value" wx:if="{{avatarUrl}}">
-          <image class="avatar" src="{{avatarUrl}}"></image>
-          <text class="nickname" wx:if="{{nickname}}">{{nickname}}</text>
-          <text class="muted" wx:else>已选头像，请填昵称</text>
-        </view>
-        <view class="step-value muted" wx:else>未选择</view>
-      </view>
-    </view>
-
-    <!-- 头像选择 button（open-type=chooseAvatar） -->
-    <view class="avatar-picker" wx:if="{{step < 2}}">
+    <!-- 头像选择 -->
+    <view class="avatar-row">
       <button
         class="avatar-btn"
         open-type="chooseAvatar"
         bindchooseavatar="onChooseAvatar"
+        hover-class="none"
       >
-        <view class="avatar-slot" wx:if="{{!avatarUrl}}">
+        <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="avatar-placeholder">
           <text class="avatar-plus">+</text>
-          <text class="avatar-tip">选头像</text>
+          <text class="avatar-text">选头像</text>
         </view>
-        <image wx:else class="avatar-preview" src="{{avatarUrl}}"></image>
       </button>
+      <view class="avatar-hint">
+        <text wx:if="{{avatarUrl}}" class="hint-done">✓ 头像已选</text>
+        <text wx:else class="hint-todo">点击选择头像</text>
+      </view>
     </view>
 
-    <!-- 昵称 input -->
-    <view class="nickname-input" wx:if="{{step < 2 || step === 2}}">
+    <!-- 昵称输入 -->
+    <view class="input-block">
       <text class="input-label">昵称</text>
       <input
         class="input-field"
@@ -60,34 +47,24 @@
         placeholder="请输入您的昵称"
         maxlength="20"
         confirm-type="done"
+        placeholder-class="input-placeholder"
       />
     </view>
 
-    <!-- 步骤 2：省市区 picker -->
-    <view class="step-row {{step >= 3 ? 'done' : ''}}">
-      <view class="step-no">{{step >= 3 ? '✓' : '2'}}</view>
-      <view class="step-content">
-        <view class="step-label">所在地区</view>
-        <view class="step-value muted" wx:if="{{!region[0]}}">未选择</view>
-        <view class="step-value" wx:else>{{regionText}}</view>
-      </view>
-      <picker mode="region" bindchange="onRegionChange" wx:if="{{step >= 2 && step < 3}}">
-        <view class="step-btn">选择</view>
-      </picker>
-    </view>
-
-    <!-- 步骤 3：登录提交 -->
+    <!-- 登录按钮 -->
     <button
-      class="login-btn"
+      class="submit-btn {{canSubmit ? 'active' : ''}}"
       bindtap="onSubmit"
-      disabled="{{step !== 3 || submitting}}"
+      disabled="{{!canSubmit}}"
+      hover-class="none"
     >
-      {{submitting ? '登录中...' : '微信一键登录'}}
+      <text wx:if="{{submitting}}">登录中...</text>
+      <text wx:else>微信一键登录</text>
     </button>
 
-    <view class="tips-row">
-      <text class="tips">登录即表示同意</text>
-      <text class="link">《用户协议》</text>
+    <view class="agreement">
+      <text>登录即表示同意</text>
+      <text class="agreement-link">《用户协议》</text>
     </view>
   </view>
 </view>
